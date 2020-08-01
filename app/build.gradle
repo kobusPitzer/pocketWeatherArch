@@ -24,16 +24,24 @@ repositories {
 android {
     compileSdkVersion 29
 
-    defaultConfig {
-        applicationId "com.kobus.pitzer.updatedweather"
-        minSdkVersion 23
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+    def versionPropsFile = file('version.properties')
+    if (versionPropsFile.canRead()) {
+        Properties versionProps = new Properties()
+        versionProps.load(new FileInputStream(versionPropsFile))
+        def versionCodeFromFile = versionProps['VERSION_CODE'].toInteger()
+        def versionNameFromFile = versionProps["VERSION_NAME"].toString()
+        defaultConfig {
+            applicationId "com.kobus.pitzer.updatedweather"
+            minSdkVersion 23
+            targetSdkVersion 29
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+            versionName = versionNameFromFile
+            versionCode = versionCodeFromFile
 
-        buildConfigField 'String', 'WEATHER_API_KEY', '"b68056a2a9e54ee3d921023573a87dda"'
+            testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+            buildConfigField 'String', 'WEATHER_API_KEY', '"b68056a2a9e54ee3d921023573a87dda"'
+        }
     }
 
     dataBinding {
