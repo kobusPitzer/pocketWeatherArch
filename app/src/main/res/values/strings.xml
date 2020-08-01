@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!DOCTYPE resources [<!ENTITY app_name "UpdatedWeather">]>
+<!DOCTYPE resources [<!ENTITY app_name "PocketWeather2">]>
 <resources>
     <string name="default_directory_name_debug">&app_name; debug</string>
     <string name="default_directory_name_logs">logs</string>
