@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View" />
+
+        <import type="com.kobus.pitzer.updatedweather.repository.constant.WeatherTypes" />
+
+        <variable
+            name="viewModel"
+            type="com.kobus.pitzer.updatedweather.repository.viewmodels.WeatherViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
+
+        <!-- todo move to databindadapter -->
+        <ImageView
+            android:id="@+id/imageScene"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:src="@{viewModel.weatherType == WeatherTypes.SUNNY ? @drawable/sea_sunny : viewModel.weatherType == WeatherTypes.RAINY ? @drawable/sea_rainy : @drawable/sea_cloudy}"
+            app:layout_constraintDimensionRatio="36:32"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- todo move to databindadapter -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_weather_forecast"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@{viewModel.weatherType == WeatherTypes.SUNNY ? @color/sea : viewModel.weatherType == WeatherTypes.RAINY ? @color/rainy  : @color/cloudy }"
+            android:paddingTop="48dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageScene" />
+
+        <TextView
+            android:id="@+id/currentTemp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.currentTemp}"
+            android:textColor="@color/text_on_sunny"
+            android:textSize="64dp"
+            app:layout_constraintBottom_toTopOf="@id/horizontalDynamicGuide"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <View
+            android:id="@+id/horizontalDynamicGuide"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            app:layout_constraintBottom_toBottomOf="@id/imageScene"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/currentWeather"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.currentWeatherDescription}"
+            android:textAllCaps="true"
+            android:textColor="@color/text_on_sunny"
+            android:textSize="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/horizontalDynamicGuide" />
+
+        <TextView
+            android:id="@+id/minTemp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:gravity="center"
+            android:text="@{viewModel.minTempText}"
+            android:textColor="@color/text_on_sunny"
+            android:textSize="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageScene" />
+
+        <TextView
+            android:id="@+id/currentTempMiddle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@{viewModel.currentTempText}"
+            android:textColor="@color/text_on_sunny"
+            android:textSize="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageScene" />
+
+        <TextView
+            android:id="@+id/maxTemp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:gravity="center"
+            android:text="@{viewModel.maxTempText}"
+            android:textColor="@color/text_on_sunny"
+            android:textSize="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageScene" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="8dp"
+            android:src="@color/text_on_sunny"
+            app:layout_constraintTop_toBottomOf="@id/minTemp" />
+
+        <ImageView
+            android:id="@+id/iv_network_state"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_margin="16dp"
+            android:src="@drawable/network_error"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

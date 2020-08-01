@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE resources [<!ENTITY app_name "UpdatedWeather">]>
+<resources>
+    <string name="default_directory_name_debug">&app_name; debug</string>
+    <string name="default_directory_name_logs">logs</string>
+
+    <string name="placeholder_day">Monday</string>
+    <string name="ok">ok</string>
+    <string name="cancel">cancel</string>
+
+    <string name="network_issue_title">Network Connection</string>
+    <string name="network_error_and_flight_mode">There was a problem connecting to the internet. Please check your connection, turn off flight mode or use Wi-Fi to access data. Old weather data will be shown if available</string>
+</resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#fff000</color>
+    <color name="colorAccent">#03DAC5</color>
+
+    <!-- Given colours -->
+    <color name="sunny">#47ab2f</color>
+    <color name="sunnyBackground">#f0b90e</color>
+    <color name="cloudy">#628594</color>
+    <color name="cloudyBackground">#5f8499</color>
+    <color name="rainy">#57575d</color>
+    <color name="rainyBackground">#767676</color>
+    <color name="sea">#4a90e2</color>
+
+    <color name="text_on_sunny">#ffffff</color>
+
+</resources>
