@@ -36,6 +36,16 @@ class WeatherViewModel(
         postInitialValues()
     }
 
+    private fun postInitialValues() {
+        currentTemp.postValue("~")
+        currentTempText.postValue("~")
+        minTempText.postValue("~")
+        maxTempText.postValue("~")
+        currentWeatherDescription.postValue("")
+
+        weatherType.postValue(WeatherTypes.SUNNY)
+    }
+
     fun getLocationWeather() {
         currentDailyForecastWeather = weatherRepository.getWeatherForecastDaily(lat, long)
 
@@ -87,22 +97,12 @@ class WeatherViewModel(
     // Normalizing value based on different codes
     // https://openweathermap.org/weather-conditions#Weather-Condition-Codes-2
     private fun getWeatherTypeBasedOnID(id: Int?): WeatherTypes? {
-        when (id) {
-            in 200..622 -> return WeatherTypes.RAINY
-            800 -> return WeatherTypes.SUNNY
-            in 801..805 -> return WeatherTypes.CLOUDY
-            else -> return WeatherTypes.SUNNY
+        return when (id) {
+            in 200..622 -> WeatherTypes.RAINY
+            800 -> WeatherTypes.SUNNY
+            in 801..805 -> WeatherTypes.CLOUDY
+            else -> WeatherTypes.SUNNY
         }
-    }
-
-    private fun postInitialValues() {
-        currentTemp.postValue("~")
-        currentTempText.postValue("~")
-        minTempText.postValue("~")
-        maxTempText.postValue("~")
-        currentWeatherDescription.postValue("")
-
-        weatherType.postValue(WeatherTypes.SUNNY)
     }
 
     // Gets weather forecast for 5 days based on specific location

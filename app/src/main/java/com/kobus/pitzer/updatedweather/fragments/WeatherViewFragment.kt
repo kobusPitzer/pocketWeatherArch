@@ -34,7 +34,6 @@ import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 class WeatherViewFragment : Fragment() {
-    private var hasAddedObserver = false
     private lateinit var rootView: View
     private lateinit var binding: FragmentWeatherViewBinding
     private val viewModel: WeatherViewModel by inject()
