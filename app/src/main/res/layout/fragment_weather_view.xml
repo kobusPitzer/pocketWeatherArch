@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <import type="android.view.View" />
 
         <import type="com.kobus.pitzer.updatedweather.repository.constant.WeatherTypes" />
@@ -17,23 +18,21 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
-        <!-- todo move to databindadapter -->
         <ImageView
             android:id="@+id/imageScene"
+            imageIcon="@{viewModel.weatherType}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:src="@{viewModel.weatherType == WeatherTypes.SUNNY ? @drawable/sea_sunny : viewModel.weatherType == WeatherTypes.RAINY ? @drawable/sea_rainy : @drawable/sea_cloudy}"
             app:layout_constraintDimensionRatio="36:32"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- todo move to databindadapter -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_weather_forecast"
+            backgroundColour="@{viewModel.weatherType}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="@{viewModel.weatherType == WeatherTypes.SUNNY ? @color/sea : viewModel.weatherType == WeatherTypes.RAINY ? @color/rainy  : @color/cloudy }"
             android:paddingTop="48dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/imageScene" />
@@ -46,16 +45,16 @@
             android:textColor="@color/text_on_sunny"
             android:textSize="64dp"
             app:layout_constraintBottom_toTopOf="@id/horizontalDynamicGuide"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <View
             android:id="@+id/horizontalDynamicGuide"
             android:layout_width="wrap_content"
             android:layout_height="1dp"
             app:layout_constraintBottom_toBottomOf="@id/imageScene"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -66,8 +65,8 @@
             android:textAllCaps="true"
             android:textColor="@color/text_on_sunny"
             android:textSize="30dp"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/horizontalDynamicGuide" />
 
         <TextView
@@ -90,8 +89,8 @@
             android:text="@{viewModel.currentTempText}"
             android:textColor="@color/text_on_sunny"
             android:textSize="16dp"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/imageScene" />
 
         <TextView
@@ -120,7 +119,7 @@
             android:layout_margin="16dp"
             android:src="@drawable/network_error"
             android:visibility="gone"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
