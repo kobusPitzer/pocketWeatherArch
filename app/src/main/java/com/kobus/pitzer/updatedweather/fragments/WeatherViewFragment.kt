@@ -90,6 +90,7 @@ class WeatherViewFragment : Fragment() {
 
         if (!isNetworkAvailable()) {
             showNoNetworkErrorDialog()
+            getUserLocation()
         }
     }
 
