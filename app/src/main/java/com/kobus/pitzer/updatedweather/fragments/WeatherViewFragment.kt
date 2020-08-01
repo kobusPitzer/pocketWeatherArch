@@ -74,7 +74,6 @@ class WeatherViewFragment : Fragment() {
                 false
             )
 
-
         rootView = binding.root
         return binding.root
     }

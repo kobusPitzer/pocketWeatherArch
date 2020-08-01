@@ -23,7 +23,7 @@ object CorePreferences {
 
     fun setLastLat(lat: String) {
         sharedPreferences.edit {
-            putString(lat, KEY_LAST_LAT)
+            putString(KEY_LAST_LAT, lat)
         }
     }
 
@@ -33,7 +33,7 @@ object CorePreferences {
 
     fun setLastLong(long: String) {
         sharedPreferences.edit {
-            putString(long, KEY_LAST_LONG)
+            putString(KEY_LAST_LONG, long)
         }
     }
 
