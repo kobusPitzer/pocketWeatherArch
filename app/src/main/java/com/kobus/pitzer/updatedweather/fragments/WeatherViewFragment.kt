@@ -119,8 +119,6 @@ class WeatherViewFragment : Fragment() {
                                 Timber.i((loc.latitude + loc.longitude).toString())
                                 CorePreferences.setLastLat(loc.latitude.toString())
                                 CorePreferences.setLastLong(loc.longitude.toString())
-                                viewModel.lat = loc.latitude.toString()
-                                viewModel.long = loc.longitude.toString()
                                 getWeather()
                             }
                         }
