@@ -19,8 +19,6 @@ class WeatherViewModel(
 ) : ViewModel() {
 
     private val degreeText = "\u00B0"
-    var lat: String = CorePreferences.getLastLat()
-    var long: String = CorePreferences.getLastLong()
     internal var currentDailyForecastWeather: LiveData<Resource<WeatherOneCall?>> =
         MediatorLiveData()
     private var main: MediatorLiveData<Current> = MediatorLiveData()
@@ -47,6 +45,8 @@ class WeatherViewModel(
     }
 
     fun getLocationWeather() {
+        val lat: String = CorePreferences.getLastLat()
+        val long: String = CorePreferences.getLastLong()
         currentDailyForecastWeather = weatherRepository.getWeatherForecastDaily(lat, long)
 
         addSources()
@@ -96,7 +96,7 @@ class WeatherViewModel(
 
     // Normalizing value based on different codes
     // https://openweathermap.org/weather-conditions#Weather-Condition-Codes-2
-    private fun getWeatherTypeBasedOnID(id: Int?): WeatherTypes? {
+    fun getWeatherTypeBasedOnID(id: Int?): WeatherTypes? {
         return when (id) {
             in 200..622 -> WeatherTypes.RAINY
             800 -> WeatherTypes.SUNNY
@@ -107,17 +107,11 @@ class WeatherViewModel(
 
     // Gets weather forecast for 5 days based on specific location
     fun getWeatherForecast(lat: String, long: String): LiveData<Resource<WeatherForecast>> {
-        this.long = long
-        this.lat = lat
-
         return weatherRepository.getWeatherForecast(lat, long)
     }
 
     // Gets weather based on specific location
     fun getLocationWeather(lat: String, long: String): LiveData<Resource<Weather>> {
-        this.long = long
-        this.lat = lat
-
         return weatherRepository.getCurrentWeather(lat, long)
     }
 }
