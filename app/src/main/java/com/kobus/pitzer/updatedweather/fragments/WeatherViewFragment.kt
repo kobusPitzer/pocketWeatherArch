@@ -87,8 +87,11 @@ class WeatherViewFragment : Fragment() {
         binding.viewModel = viewModel
 
         setupThemeObserver()
-        getUserLocation()
         registerNetworkCallback()
+
+        if (!isNetworkAvailable()) {
+            showNoNetworkErrorDialog()
+        }
     }
 
     private fun setupThemeObserver() {
