@@ -11,4 +11,6 @@
 
     <string name="network_issue_title">Network Connection</string>
     <string name="network_error_and_flight_mode">There was a problem connecting to the internet. Please check your connection, turn off flight mode or use Wi-Fi to access data. Old weather data will be shown if available</string>
+    <string name="location_permission_rationale_message">PocketWeather2 requires your location to get the weather for the area around you.</string>
+    <string name="location_permission_rationale_denied">We won\'t be able to give you weather information for the area around you.</string>
 </resources>

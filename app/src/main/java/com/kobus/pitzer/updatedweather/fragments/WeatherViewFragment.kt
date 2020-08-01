@@ -107,6 +107,8 @@ class WeatherViewFragment : Fragment() {
 
     private fun getUserLocation() {
         TedPermission.with(requireActivity())
+            .setRationaleMessage(getString(R.string.location_permission_rationale_message))
+            .setDeniedMessage(getString(R.string.location_permission_rationale_denied))
             .setPermissionListener(object : PermissionListener {
                 override fun onPermissionGranted() {
                     Timber.i("Permission granted")
