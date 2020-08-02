@@ -34,7 +34,7 @@ class WeatherViewModel(
         postInitialValues()
     }
 
-    private fun postInitialValues() {
+    fun postInitialValues() {
         currentTemp.postValue("~")
         currentTempText.postValue("~")
         minTempText.postValue("~")

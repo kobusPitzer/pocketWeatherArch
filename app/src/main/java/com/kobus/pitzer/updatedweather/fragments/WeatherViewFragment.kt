@@ -2,6 +2,8 @@ package com.kobus.pitzer.updatedweather.fragments
 
 import android.Manifest
 import android.content.Context
+import android.content.Context.SENSOR_SERVICE
+import android.hardware.SensorManager
 import android.location.Location
 import android.net.ConnectivityManager
 import android.net.Network
@@ -30,6 +32,8 @@ import com.kobus.pitzer.updatedweather.repository.constant.WeatherTypes
 import com.kobus.pitzer.updatedweather.repository.models.Daily
 import com.kobus.pitzer.updatedweather.repository.preferences.CorePreferences
 import com.kobus.pitzer.updatedweather.repository.viewmodels.WeatherViewModel
+import com.squareup.seismic.ShakeDetector
+import com.squareup.seismic.ShakeDetector.SENSITIVITY_LIGHT
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 
@@ -40,6 +44,11 @@ class WeatherViewFragment : Fragment() {
     private lateinit var weatherAdapter: WeatherForecastAdapter
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var networkDialog: AlertDialog? = null
+    private var refreshDialog: AlertDialog? = null
+
+
+    private var sd: ShakeDetector? = null
+    private var sensorManager: SensorManager? = null
 
     private val networkCallback: ConnectivityManager.NetworkCallback =
         object : ConnectivityManager.NetworkCallback() {
@@ -92,6 +101,52 @@ class WeatherViewFragment : Fragment() {
             showNoNetworkErrorDialog()
             getUserLocation()
         }
+
+        sensorManager = requireActivity().getSystemService(SENSOR_SERVICE) as SensorManager
+        sd = ShakeDetector(ShakeDetector.Listener {
+            Timber.i("refresh")
+            askToRefresh()
+        })
+        sd?.start(sensorManager)
+        sd?.setSensitivity(SENSITIVITY_LIGHT)
+    }
+
+    private fun askToRefresh() {
+        if (refreshDialog != null) {
+            refreshDialog!!.dismiss()
+        }
+        val builder = AlertDialog.Builder(requireActivity())
+        builder.setCancelable(false)
+        builder.setTitle("Looks like things are getting shaky")
+        builder.setMessage("Do you want to refresh your weather data?")
+        builder.setPositiveButton(this.getString(R.string.ok)) { _, _ ->
+            if (refreshDialog != null) {
+                requireActivity().runOnUiThread {
+                    refreshDialog!!.dismiss()
+                    viewModel.postInitialValues()
+                    getUserLocation()
+                }
+            }
+        }
+        builder.setNegativeButton(this.getString(R.string.cancel)) { _, _ ->
+            if (refreshDialog != null) {
+                requireActivity().runOnUiThread {
+                    refreshDialog!!.dismiss()
+                }
+            }
+        }
+        refreshDialog = builder.create()
+        refreshDialog?.show()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        sd?.start(sensorManager)
+    }
+
+    override fun onPause() {
+        sd?.stop()
+        super.onPause()
     }
 
     private fun setupThemeObserver() {
