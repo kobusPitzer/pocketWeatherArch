@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Goto Current directory
+cd "${0%/*}"
+
+ARG_STAGE=Release
+DEFAULT_BRANCH=master
+
+read -p "Branch to build: [$DEFAULT_BRANCH] " BRANCH
+BRANCH=${BRANCH:-$DEFAULT_BRANCH}
+
+# Exporting the .env variables
+if [ -f ".env" ]; then
+    export $(cat .env | sed -e /^$/d -e /^#/d | xargs)
+fi
+
+# Get values from env
+CIRCLE_API_USER_TOKEN=${CIRCLE_API_USER_TOKEN:-default_value}
+
+REPO_NAME=pocketWeatherArch
+
+curl -u ${CIRCLE_API_USER_TOKEN}: \
+     -d build_parameters[CIRCLE_JOB]=build-and-publish \
+     -d build_parameters[ARG_STAGE]=$ARG_STAGE \
+     https://circleci.com/api/v1.1/project/github/kobusPitzer/$REPO_NAME/tree/$BRANCH

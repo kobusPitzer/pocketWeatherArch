@@ -1,0 +1,126 @@
+# .circleci/config.yml 
+version: 2.0
+jobs:
+  build:
+    docker:
+      - image: alpine
+    steps:
+      - run: exit 1
+
+  build-and-publish:
+    docker:
+      - image: android
+    working_directory: ~/pocketWeatherArch
+    environment:
+      APP_NAME: PocketWeather2
+    shell: /bin/bash --login -o pipefail
+    steps:
+      - run:
+          name: Slack notification - start
+          command: >
+            curl -X POST -H 'Content-type: application/json'
+            https://hooks.slack.com/services/CONFIG_ID
+            -d "{
+                    \"attachments\": [
+                        {
+                            \"color\": \"#24292F\",
+                            \"title\": \"Start $ARG_STAGE build ($APP_NAME Android)\",
+                            \"title_link\": \"$CIRCLE_BUILD_URL\",
+                            \"author_name\": \"$CIRCLE_USERNAME\",
+                            \"author_icon\": \"https://github.com/$CIRCLE_USERNAME.png\"
+                        }
+                    ]
+                }"
+
+      - add_ssh_keys
+      - checkout
+      - run:
+          name: Checkout version branch
+          working_directory: ~/
+          command: |
+            VER_DIR=version-info
+            git clone --single-branch -b version $CIRCLE_REPOSITORY_URL $VER_DIR
+            cd $VER_DIR
+            git branch
+            git show-ref
+
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+
+      - run:
+          name: Build APK
+          command: |
+            mkdir -p ../pocketWeatherArch-out
+            ci/build.sh
+
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+
+      - store_artifacts:
+          path: app/build/reports
+          destination: reports
+      - store_artifacts:
+          path: ~/pocketWeatherArch-out
+          destination: build-output
+      - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
+          path: app/build/test-results
+      # # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples
+
+      - run:
+          name: Slack notification - success
+          command: >
+            curl -X POST -H 'Content-type: application/json'
+            https://hooks.slack.com/services/CONFIG_ID
+            -d "{
+                    \"attachments\": [
+                        {
+                            \"color\": \"#41AA58\",
+                            \"title\": \"PASS $ARG_STAGE build ($APP_NAME Android)\",
+                            \"title_link\": \"$CIRCLE_BUILD_URL\",
+                            \"author_name\": \"$CIRCLE_USERNAME\",
+                            \"author_icon\": \"https://github.com/$CIRCLE_USERNAME.png\"
+                        }
+                    ]
+                }"
+
+      - run:
+          name: Slack notification - failed
+          when: on_fail
+          command: >
+            curl -X POST -H 'Content-type: application/json'
+            https://hooks.slack.com/services/CONFIG_ID
+            -d "{
+                    \"attachments\": [
+                        {
+                            \"color\": \"#D10C20\",
+                            \"title\": \"FAIL $ARG_STAGE build ($APP_NAME Android)\",
+                            \"title_link\": \"$CIRCLE_BUILD_URL\",
+                            \"author_name\": \"$CIRCLE_USERNAME\",
+                            \"author_icon\": \"https://github.com/$CIRCLE_USERNAME.png\"
+                        }
+                    ]
+                }"
+
+workflows:
+  version: 2
+
+  ignore_commits:
+    jobs:
+      - build:
+          filters:
+            branches:
+              ignore: /.*/ # Skip all branches. This job is to remove warning in the UI
+
+  nightly:
+    triggers:
+      - schedule:
+          cron: "11 0 * * *"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - build-and-publish:
+          context: pocketWeatherArch2-nightly
